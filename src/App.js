@@ -8,8 +8,7 @@ const {ethers} = require("ethers");
 function App() {
   const [transactions, setTransactions] = useState([]);
 
-
-  (function init() {
+  function fetchTransactionsHandler() {
     const url = "https://eth-mainnet.g.alchemy.com/v2/OslwwunY4JRtMPtd3MMKCM6Bk2tFAkqV";
     const wbtcContractAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
@@ -24,8 +23,8 @@ function App() {
       const burnTransactionsAll = await contract.queryFilter("Burn", 0, "latest");
       const mintTransactions = mintTransactionsAll.slice(-20);
       const burnTransactions = burnTransactionsAll.slice(-20);
-      console.log(mintTransactions);
-      console.log(burnTransactions);
+      // console.log(mintTransactions);
+      // console.log(burnTransactions);
 
       const transformedTransactions = mintTransactions.map((transactionData) => {
         return {
@@ -40,25 +39,6 @@ function App() {
 
     };
     console.log(result());
-  })();
-
-
-  function fetchTransactionsHandler() {
-    fetch('https://swapi.dev/api/films/')
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      const transformedTransactions = data.results.map((transactionData) => {
-        return {
-          id: transactionData.id,
-          hash: transactionData.hash,
-          from: transactionData.from,
-          time: transactionData.time,
-        };
-      });
-      setTransactions(transformedTransactions);
-    });
   }
 
   return (
