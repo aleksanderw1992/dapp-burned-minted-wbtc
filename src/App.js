@@ -6,7 +6,10 @@ import './App.css';
 const {ethers} = require("ethers");
 
 function App() {
+  // const numberOfLastTransactions = 20;
+  const numberOfLastTransactions = 2;
   const [minted, setMinted] = useState([]);
+  // eslint-disable-next-line
   const [burned, setBurned] = useState([]);
 
   function fetchTransactionsHandler() {
@@ -20,24 +23,29 @@ function App() {
 
     const contract = new ethers.Contract(wbtcContractAddress, abi, provider);
     const result = async () => {
-      const mintTransactionsAll = await contract.queryFilter("Mint", 0,
-          "latest");
-      const burnTransactionsAll = await contract.queryFilter("Burn", 0,
-          "latest");
-      const mintTransactions = mintTransactionsAll.slice(-20);
-      const burnTransactions = burnTransactionsAll.slice(-20);
+      const mintTransactionsAll = await contract.queryFilter("Mint", 0, "latest");
+      const burnTransactionsAll = await contract.queryFilter("Burn", 0, "latest");
+      const mintTransactions = mintTransactionsAll.slice(- numberOfLastTransactions);
+      // eslint-disable-next-line
+      const burnTransactions = burnTransactionsAll.slice(-numberOfLastTransactions);
       // console.log(mintTransactions);
       // console.log(burnTransactions);
 
-      const transformedMintedTransactions = mintTransactions.map(
-          (transactionData) => {
-            return {
-              id: transactionData.blockNumber,
-              hash: transactionData.transactionHash,
-              from: null,
-              time: null,
-            };
-          });
+      const transformedMintedTransactions = [];
+      for (let i = 0; i < mintTransactions.length; i++) {
+        let transactionData = mintTransactions[i];
+
+        const block = await provider.getBlock(transactionData.blockNumber);
+        const transaction = await provider.getTransaction(transactionData.transactionHash);
+        // console.log(block);
+        // console.log(transaction);
+        transformedMintedTransactions.push({
+          id: transactionData.blockNumber,
+          hash: transactionData.transactionHash,
+          from: transaction.from,
+          time: new Date(block.timestamp * 1000).toLocaleString("en-GB", {timeZoneName: "short"}),
+        });
+      }
       console.log(transformedMintedTransactions);
       setMinted(transformedMintedTransactions);
 
