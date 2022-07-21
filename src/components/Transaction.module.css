@@ -1,4 +1,4 @@
-.movie {
+.transaction {
   margin: 1rem;
   padding: 1rem;
   background-color: #230052;
@@ -8,12 +8,12 @@
   color: white;
 }
 
-.movie h2 {
+.transaction h2 {
   font-size: 2rem;
   color: #f7e702;
 }
 
-.movie h3 {
+.transaction h3 {
   color: #eccf77;
   margin: 0;
   font-size: 1rem;
