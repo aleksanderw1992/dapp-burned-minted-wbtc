@@ -6,7 +6,8 @@ import './App.css';
 const {ethers} = require("ethers");
 
 function App() {
-  const [transactions, setTransactions] = useState([]);
+  const [minted, setMinted] = useState([]);
+  const [burned, setBurned] = useState([]);
 
   function fetchTransactionsHandler() {
     const url = "https://eth-mainnet.g.alchemy.com/v2/OslwwunY4JRtMPtd3MMKCM6Bk2tFAkqV";
@@ -19,23 +20,26 @@ function App() {
 
     const contract = new ethers.Contract(wbtcContractAddress, abi, provider);
     const result = async () => {
-      const mintTransactionsAll = await contract.queryFilter("Mint", 0, "latest");
-      const burnTransactionsAll = await contract.queryFilter("Burn", 0, "latest");
+      const mintTransactionsAll = await contract.queryFilter("Mint", 0,
+          "latest");
+      const burnTransactionsAll = await contract.queryFilter("Burn", 0,
+          "latest");
       const mintTransactions = mintTransactionsAll.slice(-20);
       const burnTransactions = burnTransactionsAll.slice(-20);
       // console.log(mintTransactions);
       // console.log(burnTransactions);
 
-      const transformedTransactions = mintTransactions.map((transactionData) => {
-        return {
-          id: transactionData.blockNumber,
-          hash: transactionData.transactionHash,
-          from: null,
-          time: null,
-        };
-      });
-      console.log(transformedTransactions);
-      setTransactions(transformedTransactions);
+      const transformedMintedTransactions = mintTransactions.map(
+          (transactionData) => {
+            return {
+              id: transactionData.blockNumber,
+              hash: transactionData.transactionHash,
+              from: null,
+              time: null,
+            };
+          });
+      console.log(transformedMintedTransactions);
+      setMinted(transformedMintedTransactions);
 
     };
     console.log(result());
@@ -44,11 +48,17 @@ function App() {
   return (
       <React.Fragment>
         <section>
-          <button onClick={fetchTransactionsHandler}>Fetch Burns & Mints</button>
+          <button onClick={fetchTransactionsHandler}>Fetch Burns & Mints
+          </button>
         </section>
-        <section>
-          <TransactionsList transactions={transactions}/>
-        </section>
+        <div className="row">
+          <div className="column">
+            <TransactionsList transactions={minted}/>
+          </div>
+          <div className="column">
+            <TransactionsList transactions={burned}/>
+          </div>
+        </div>
       </React.Fragment>
   );
 }
