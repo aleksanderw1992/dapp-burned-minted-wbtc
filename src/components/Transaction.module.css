@@ -6,15 +6,10 @@
   border-radius: 12px;
   text-align: center;
   color: white;
+  font-size: 12px;
 }
 
-.transaction h2 {
-  font-size: 2rem;
-  color: #f7e702;
-}
-
-.transaction h3 {
-  color: #eccf77;
-  margin: 0;
-  font-size: 1rem;
+a {
+  color: #ffffff;
+  cursor: pointer;
 }
