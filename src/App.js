@@ -7,15 +7,13 @@ import {trackPromise, usePromiseTracker} from 'react-promise-tracker';
 const {ethers} = require("ethers");
 
 function App() {
-  // const numberOfLastTransactions = 20;
-  const numberOfLastTransactions = 2;
   const [minted, setMinted] = useState([]);
   const [burned, setBurned] = useState([]);
 
   const { promiseInProgress } = usePromiseTracker(null);
 
 
-  function fetchTransactionsHandler() {
+  function fetchTransactionsHandler(numberOfLastTransactions) {
     const url = "https://eth-mainnet.g.alchemy.com/v2/OslwwunY4JRtMPtd3MMKCM6Bk2tFAkqV";
     const wbtcContractAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
@@ -59,7 +57,11 @@ function App() {
   return (
       <React.Fragment>
         <section>
-          <button onClick={fetchTransactionsHandler}>Fetch wBTC Burns & Mints
+          <button onClick={() => fetchTransactionsHandler(2)}>
+            Fetch wBTC Burns & Mints (last 2 blocks)
+          </button>
+          <button onClick={() => fetchTransactionsHandler(20)}>
+            Fetch wBTC Burns & Mints (last 20 blocks)
           </button>
         </section>
         <div className={`row ${promiseInProgress ? "hide" : ""}`}>
