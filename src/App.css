@@ -39,3 +39,7 @@ button:active {
   display: table;
   clear: both;
 }
+
+.hide {
+  display: none;
+}
